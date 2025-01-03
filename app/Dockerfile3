@@ -1,0 +1,31 @@
+# Use the official PHP-FPM image
+FROM php:8.2-fpm
+
+# Install required extensions for PHP
+RUN apt-get update && apt-get install -y \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libwebp-dev \
+    libxpm-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-xpm \
+    && docker-php-ext-install -j$(nproc) gd mysqli pdo_mysql \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Nginx
+RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
+
+# Copy the Nginx server block configuration
+COPY default.conf /etc/nginx/conf.d/default.conf
+
+# Set the working directory for PHP-FPM
+WORKDIR /usr/share/nginx/html/
+
+# Copy application code into the container
+COPY . /usr/share/nginx/html/
+
+# Expose Nginx port
+EXPOSE 80
+
+# Start both Nginx and PHP-FPM using a supervisor process
+CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]

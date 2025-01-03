@@ -1,0 +1,15 @@
+FROM mysql
+
+ENV MYSQL_ROOT_PASSWORD=Pass@123
+ENV MYSQL_DATABASE=facebook
+ENV MYSQL_USER=root
+ENV MYSQL_PASSWORD=Pass@123
+
+# Copy initialization scripts
+COPY init.sh /docker-entrypoint-initdb.d/
+COPY init.sql /docker-entrypoint-initdb.d/
+EXPOSE 3306
+# Set permissions for the initialization scripts
+RUN chmod +x /docker-entrypoint-initdb.d/init.sh
+CMD ["mysqld"]
+
