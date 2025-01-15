@@ -1,11 +1,4 @@
-CREATE DATABASE facebook;
-
-USE facebook;
-
-CREATE TABLE  users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL
-);
-
-INSERT INTO users (name, email) VALUES ('$name', '$email');
+create database insta;
+use insta;
+create table users(id int , name varchar(20),email varchar(100),password varchar(30));
+insert into users values(1,'ashfak','ashfak@gmail.com','ashfak@123');
